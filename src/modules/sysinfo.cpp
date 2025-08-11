@@ -4,7 +4,7 @@
 #include <fstream>
 #include <unordered_map>
 #include<iostream>
-const std::string INFO_FILE = "/proc/cpuinfo";
+std::unordered_map<std::string, std::string> allconfig = load_config();
 std::string final_out;
 void add_data(std::unordered_map<std::string, std::string> &allconfig, std::string &out, std::ifstream &file, std::string finder){
     std::string line;
@@ -22,14 +22,28 @@ void add_data(std::unordered_map<std::string, std::string> &allconfig, std::stri
     }
 }
 void cpu_info(){
-    std::unordered_map<std::string, std::string> allconfig = load_config();
+    const std::string INFO_FILE = "/proc/cpuinfo";
     final_out+="__CPU_INFO__\n";
-    std::ifstream file(INFO_FILE);
-    if(file){
-        add_data(allconfig, final_out, file, "cpu");
+    std::ifstream cpuinfo(INFO_FILE);
+    if(cpuinfo.is_open()){
+        add_data(allconfig, final_out, cpuinfo, "cpu");
     }
+    cpuinfo.close();
+}
+void ram_info(){
+    const std::string INFO_FILE = "/proc/meminfo";
+    final_out+="__MEM_INFO__\n";
+    std::ifstream meminfo(INFO_FILE);
+    if(meminfo.is_open()){
+        add_data(allconfig, final_out, meminfo, "mem");
+    }
+    meminfo.close();
 }
 std::string get_info(){
     cpu_info();
+    ram_info();
+    // for(std::pair<std::string, std::string> meow:allconfig){
+    //     std::cout<< meow.first << ": " << meow.second << std::endl;
+    // }
     return final_out;
 }

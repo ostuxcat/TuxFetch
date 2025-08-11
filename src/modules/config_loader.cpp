@@ -14,7 +14,7 @@ std::unordered_map<std::string, std::string> load_config(const std::string &CONF
     std::string line;
     while(std::getline(file, line)){
         int idx = line.find("=");
-        if(idx) allconfig[line.substr(0, idx)] = line.substr(idx+1);
+        if(idx!=std::string::npos) allconfig[line.substr(0, idx)] = line.substr(idx+1);
     }
     return allconfig;
 }
