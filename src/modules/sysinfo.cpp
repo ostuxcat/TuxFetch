@@ -15,6 +15,8 @@ void add_data(std::unordered_map<std::string, std::string> &allconfig, std::stri
                 if(idx!=std::string::npos){
                     std::string colname = config.first;
                     out+=std::format("{}: {}\n", colname.replace(colname.find("_"), 1, " "), line.substr(line.find(": ")+1));
+                    file.clear();
+                    file.seekg(0, std::ios::beg);
                     break;
                 }
             }
